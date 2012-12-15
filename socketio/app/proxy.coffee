@@ -44,8 +44,10 @@ proxy =
 
         server: require( 'dgram' ).createSocket 'udp4'
 
-        onReceive: (msg, rinfo) -> 
-            process.stdout.write msg.toString()
+        onReceive: (data, rinfo) -> 
+            streamID = proxy.streams.testfeed.id
+            msg = data.toString()
+            proxy.sendToSubscribers streamID, msg
  
         onListen: ->
             address = proxy.parent.server.address()
@@ -100,4 +102,28 @@ proxy =
             streams: proxy.streams
 
 
+    #
+    # send to subscribers
+    # 
+    # Pending subscription method 
+    # (subscribers == all attached clients)
+    # 
+
+    sendToSubscribers: (streamID, msg) -> 
+
+        for id of proxy.children
+
+            console.log "sending %s to socket at %s", msg, id
+
+            socket = proxy.children[id]
+
+            socket.emit 'event:data'
+
+                stream: streamID
+                payload: msg
+
+
+
 module.exports = proxy
+
+
