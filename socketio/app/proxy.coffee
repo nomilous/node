@@ -1,15 +1,15 @@
 #
-# Multiplexing PubSub Server
-#  
-# Multiple inbound socket datastreams available 
-# for client subscription.
-#
+# n-Tier Proxiing Node 
+# 
+# - subscription based data distribution
+# - data only flows downtree (for now...)
+# 
 
-mux = 
+proxy = 
 
 
     #
-    # available data streams
+    # available inbound data streams
     #
 
     streams: 
@@ -23,17 +23,17 @@ mux =
 
 
     # 
-    # connected inbound data feeds
+    # connected inbound data feed
     #
 
-    servers: {}
+    parent: {}
 
 
 
     #
     # connected subscribers
     # 
-    # maintains store of attached clients
+    # maintains store of attached child nodes
     # keyed on their socketio id 
     # 
     # TODO: this will need to move to redis
@@ -41,7 +41,7 @@ mux =
     #       node restart
     # 
 
-    clients: {}
+    children: {}
 
 
 
@@ -50,13 +50,13 @@ mux =
     # client facing interface
     #
 
-    client: (socket) -> 
+    newChild: (socket) -> 
 
         #
-        # create ref to connected socket 
+        # create ref to connected child socket 
         #
 
-        mux.clients[ socket.id ] = socket
+        proxy.children[ socket.id ] = socket
 
         socket.emit 'event:connect'
 
@@ -68,7 +68,7 @@ mux =
             #
 
             id: socket.id
-            streams: mux.streams
+            streams: proxy.streams
 
 
-module.exports = mux
+module.exports = proxy

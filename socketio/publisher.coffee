@@ -1,7 +1,8 @@
 all = require './app/server' 
 all.server.listen 3000
 
-mux = require './app/mux'
+proxy = require './app/proxy'
 
-all.io.sockets.on 'connection', mux.client
+
+all.io.sockets.on 'connection', proxy.newChild
 
