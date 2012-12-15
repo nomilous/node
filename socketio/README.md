@@ -24,27 +24,36 @@ coffee server
 ```
 
 
-To discover/invent
-------------------
+### Broadcaster
 
+```bash
 
-### subscribable data feed
+#
+# start broadcast server
+#
 
+coffee broadcaster
 
-```bash 
-
-coffee publisher
 
 ```
 
+* Each attached [browser](http://localhost:3000/) receives datagram
+* ALT^CMD^i (Chrome) starts console.log in browser
 
 
-### ways for a connected 'community' of browsers to span more than one node instance
+```bash
 
-pending
+# 
+# To send a datagram: 
+# 
+#   MAC: 
+# 
+#     $ echo 'data' | nc -uw 0 0.0.0.0 12345
+# 
+#   Ubuntu:
+# 
+#     $ echo 'data' | nc -uq 0 0.0.0.0 12345
+# 
 
-### HTTPS and LTS encrypted socket
-
-pending
-
+```
 
