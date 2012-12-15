@@ -24,9 +24,38 @@ proxy =
 
     # 
     # connected inbound data feed
-    #
+    # 
+ 
+    parent: 
 
-    parent: {}
+        #
+        # TEMPORARY: parent as datagram socket listener
+        # 
+        # To send a datagram: 
+        # 
+        #   MAC: 
+        # 
+        #     $ echo 'data' | nc -uw 0 0.0.0.0 12345
+        # 
+        #   Ubuntu:
+        # 
+        #     $ echo 'data' | nc -uq 0 0.0.0.0 12345
+        # 
+
+        server: require( 'dgram' ).createSocket 'udp4'
+
+        onReceive: (msg, rinfo) -> 
+            process.stdout.write msg.toString()
+ 
+        onListen: ->
+            address = proxy.parent.server.address()
+            console.log "listening at #{ address.address }:#{ address.port }"
+ 
+        start: -> 
+            proxy.parent.server.on 'message', proxy.parent.onReceive
+            proxy.parent.server.on 'listening', proxy.parent.onListen
+            proxy.parent.server.bind 12345
+
 
 
 
