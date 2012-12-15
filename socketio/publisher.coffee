@@ -1,15 +1,7 @@
 all = require './app/server' 
 all.server.listen 3000
 
+mux = require './app/mux'
 
-all.io.sockets.on 'connection', (socket) ->
-
-    #
-    # browser connected
-    #
-
-    socket.emit 'event1', data: 'DATA'
-
-
-
+all.io.sockets.on 'connection', mux.client
 

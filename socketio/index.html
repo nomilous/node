@@ -6,14 +6,15 @@
 
   var socket = io.connect('http://localhost:3000');
 
-  socket.on('event1', function (msg) {
-    alert(msg.data);
-    
+  socket.on('event1', function (msg) { 
+    alert(msg.data); 
+  });
 
 
-    //socket.emit('my other event', { my: 'data' });
-  
 
+  socket.on('event:connect', function(msg) {
+
+    console.log('event:connect', msg);
 
   });
 
